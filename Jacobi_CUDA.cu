@@ -13,6 +13,7 @@ double h_THRESHOLD = 1e-9;
 
 using namespace std;
 
+//Test Convergence for host
 int isConvergeHost(double *cur_x, double *pre_x, int row){
         double diff = 0.0;
         for (int i = 0 ; i < row;i++){
@@ -24,6 +25,7 @@ int isConvergeHost(double *cur_x, double *pre_x, int row){
         return 0;  
 }
 
+//Test Convergence for device
 __device__ 
 int isConverge(double *cur_x, double *pre_x, int row){
         double diff = 0.0;
@@ -57,12 +59,12 @@ void parallelJacob(double *cur_x, double *pre_x, double *A, double *b, int row, 
     double sigma = 0.0;
     int idx = blockDim.x * blockIdx.x + threadIdx.x;
 
-    int preCom = idx*col;
+   // int preCom = idx*col;
     for (int j=0; j<col; j++){
         if (idx != j)
-            sigma += A[preCom+ j] * pre_x[j];
+            sigma += A[idx*col+ j] * pre_x[j];
     }
-    cur_x[idx] = (b[idx] - sigma) / A[preCom + idx];
+    cur_x[idx] = (b[idx] - sigma) / A[idx*col + idx];
     //Synchronize Threads to determine whether we converge here
     //__syncthreads();
     //*isCon = isConverge(cur_x, pre_x, row);
@@ -141,6 +143,7 @@ bool InitCUDA(){
     return true;
 }
 
+//Calculate Time difference in us
 double time_diff(struct timeval x , struct timeval y){
     double x_ms , y_ms , diff;
      
