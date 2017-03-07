@@ -292,8 +292,7 @@ int main(int argc, char *argv[]){
 }
 
 /*
-http://www.robots.ox.ac.uk/~sjrob/Teaching/EngComp/linAlg34.pdf
-http://www2.kimicat.com/home
-
+REF:
+https://github.com/MMichel/CudaJacobi/blob/master/jacobi.cu
 */
 
